@@ -20,6 +20,10 @@ typealias CompletionHandler = (_ Success: Bool) -> ()
 let TO_LOGIN = "toLogin"
 let TO_CREATE = "toCreate"
 let UNWIND = "unwindToChannel"
+let TO_AVATAR_PICKER = "toAvatarPicker"
+
+//Colors
+let smackPurpleColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 0.5)
 
 
 //User Defaults
