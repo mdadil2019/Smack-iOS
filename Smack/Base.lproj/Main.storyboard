@@ -52,6 +52,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TUy-S3-ent">
                                 <rect key="frame" x="281" y="85.5" width="22" height="22"/>
                                 <state key="normal" image="addChannelButton"/>
+                                <connections>
+                                    <action selector="addChannelPressed:" destination="wUV-lx-FfI" eventType="touchUpInside" id="2nC-9O-PE9"/>
+                                </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menuProfileIcon" translatesAutoresizingMaskIntoConstraints="NO" id="wml-Q8-jW8" customClass="CircleImage" customModule="Smack" customModuleProvider="target">
                                 <rect key="frame" x="12" y="524" width="99" height="99"/>
@@ -60,7 +63,7 @@
                                 <rect key="frame" x="0.0" y="117.5" width="375" height="396.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="xSY-47-KBi">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="channelCell" id="xSY-47-KBi" customClass="ChannelCell" customModule="Smack" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xSY-47-KBi" id="txU-gl-iEA">
@@ -80,6 +83,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="channelLabel" destination="cxc-eS-Qd0" id="geO-mi-vPn"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -124,6 +130,8 @@
                     </view>
                     <connections>
                         <outlet property="loginBtn" destination="Z2A-y3-O1c" id="XAS-9t-Tsd"/>
+                        <outlet property="loginProfileView" destination="wml-Q8-jW8" id="KWY-r1-u0V"/>
+                        <outlet property="tableView" destination="b5P-bZ-oo0" id="6wF-3Z-05s"/>
                         <segue destination="TjX-dU-Gjm" kind="show" identifier="toLogin" id="HKe-1W-feM"/>
                     </connections>
                 </viewController>
@@ -230,7 +238,14 @@
                                         <real key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="loginPressed:" destination="TjX-dU-Gjm" eventType="touchUpInside" id="FiY-h5-ycw"/>
+                                </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="uJj-ci-aCt">
+                                <rect key="frame" x="169" y="215" width="37" height="37"/>
+                                <color key="color" red="0.2352502548" green="0.68844153019999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -239,8 +254,10 @@
                             <constraint firstItem="MsV-de-Hum" firstAttribute="top" secondItem="SoP-kP-ftq" secondAttribute="bottom" id="6bA-7P-qZO"/>
                             <constraint firstItem="fBx-sM-60j" firstAttribute="top" secondItem="PAL-gS-AHW" secondAttribute="bottom" constant="40" id="D1R-al-x8c"/>
                             <constraint firstItem="SoP-kP-ftq" firstAttribute="top" secondItem="fBx-sM-60j" secondAttribute="bottom" constant="40" id="Hdw-3e-yMN"/>
+                            <constraint firstItem="uJj-ci-aCt" firstAttribute="centerX" secondItem="Bfy-Au-o37" secondAttribute="centerX" id="Mu4-RO-2rc"/>
                             <constraint firstItem="4b7-2z-hn8" firstAttribute="top" secondItem="6Nx-AT-8Vh" secondAttribute="top" id="NjA-TH-iNP"/>
                             <constraint firstItem="fBx-sM-60j" firstAttribute="centerX" secondItem="Bfy-Au-o37" secondAttribute="centerX" id="Twl-UR-1Eg"/>
+                            <constraint firstItem="uJj-ci-aCt" firstAttribute="centerY" secondItem="Bfy-Au-o37" secondAttribute="centerY" constant="-100" id="f6R-d3-bYn"/>
                             <constraint firstItem="PAL-gS-AHW" firstAttribute="centerX" secondItem="Bfy-Au-o37" secondAttribute="centerX" id="hp0-MZ-YqT"/>
                             <constraint firstItem="MsV-de-Hum" firstAttribute="centerX" secondItem="Bfy-Au-o37" secondAttribute="centerX" id="tsj-be-7FR"/>
                             <constraint firstItem="SoP-kP-ftq" firstAttribute="centerX" secondItem="Bfy-Au-o37" secondAttribute="centerX" id="xNd-S3-9Xr"/>
@@ -248,6 +265,9 @@
                         <viewLayoutGuide key="safeArea" id="6Nx-AT-8Vh"/>
                     </view>
                     <connections>
+                        <outlet property="passwordTxt" destination="lAT-RF-VPO" id="DO5-Gf-dlY"/>
+                        <outlet property="spinnerLogin" destination="uJj-ci-aCt" id="CMH-pU-83t"/>
+                        <outlet property="userNameTxt" destination="Wyk-Tq-KaM" id="zpY-Ug-Pa8"/>
                         <segue destination="aSt-Z6-3oM" kind="show" identifier="toCreate" id="RGV-Ri-Mib"/>
                     </connections>
                 </viewController>
@@ -438,6 +458,10 @@
                                     <action selector="colorPickerPressed:" destination="aSt-Z6-3oM" eventType="touchUpInside" id="Hbb-Gk-Ntv"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ql4-eD-e7h">
+                                <rect key="frame" x="169" y="215" width="37" height="37"/>
+                                <color key="color" red="0.23525025483578654" green="0.68844153018118126" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6b2-Ip-tAo" customClass="RoundedButton" customModule="Smack" customModuleProvider="target">
                                 <rect key="frame" x="62.5" y="577" width="250" height="50"/>
                                 <color key="backgroundColor" red="0.51372549020000002" green="0.71764705880000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -463,9 +487,11 @@
                         <constraints>
                             <constraint firstItem="nF8-Lx-1mS" firstAttribute="top" secondItem="lZu-Ap-sIA" secondAttribute="top" constant="50" id="1l7-gJ-IL6"/>
                             <constraint firstItem="m6d-tP-a0w" firstAttribute="top" secondItem="nF8-Lx-1mS" secondAttribute="bottom" constant="40" id="2RK-hM-e8r"/>
+                            <constraint firstItem="ql4-eD-e7h" firstAttribute="centerY" secondItem="2oL-vV-FXq" secondAttribute="centerY" constant="-100" id="5kP-eR-u6l"/>
                             <constraint firstItem="c2v-3n-TBs" firstAttribute="centerX" secondItem="2oL-vV-FXq" secondAttribute="centerX" id="C8A-QU-MN7"/>
                             <constraint firstItem="6b2-Ip-tAo" firstAttribute="centerX" secondItem="2oL-vV-FXq" secondAttribute="centerX" id="DCp-36-nFY"/>
                             <constraint firstItem="GdI-Ks-KW6" firstAttribute="top" secondItem="lZu-Ap-sIA" secondAttribute="top" id="Do6-VX-Lla"/>
+                            <constraint firstItem="ql4-eD-e7h" firstAttribute="centerX" secondItem="2oL-vV-FXq" secondAttribute="centerX" id="DvH-aL-9Hq"/>
                             <constraint firstItem="MyF-hU-r9d" firstAttribute="centerX" secondItem="2oL-vV-FXq" secondAttribute="centerX" id="EA9-PI-v5R"/>
                             <constraint firstItem="7Je-Zo-k02" firstAttribute="centerX" secondItem="2oL-vV-FXq" secondAttribute="centerX" id="G1c-bg-l00"/>
                             <constraint firstItem="7Je-Zo-k02" firstAttribute="top" secondItem="m6d-tP-a0w" secondAttribute="bottom" constant="38" id="LdG-YK-ydh"/>
@@ -479,6 +505,7 @@
                         <viewLayoutGuide key="safeArea" id="lZu-Ap-sIA"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="ql4-eD-e7h" id="3y7-4t-iM2"/>
                         <outlet property="emailTxt" destination="qrC-Jz-MCC" id="xfc-aE-1dZ"/>
                         <outlet property="passTxt" destination="cuT-cy-1r6" id="9jh-z8-hy8"/>
                         <outlet property="userImg" destination="7Je-Zo-k02" id="LOO-fN-Gtn"/>

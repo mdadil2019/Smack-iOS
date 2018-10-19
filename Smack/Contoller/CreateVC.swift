@@ -11,6 +11,7 @@ import UIKit
 class CreateVC: UIViewController {
 
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var userNameTxt: UITextField!
     @IBOutlet weak var passTxt: UITextField!
     @IBOutlet weak var emailTxt: UITextField!
@@ -38,6 +39,8 @@ class CreateVC: UIViewController {
     }
 
     @IBAction func createAccountPressed(_ sender: Any) {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
         guard let email = emailTxt.text, emailTxt.text != "" else {return}
         guard let password = passTxt.text, passTxt.text != "" else {return}
         guard let name = userNameTxt.text, userNameTxt.text != "" else {return}
@@ -52,6 +55,11 @@ class CreateVC: UIViewController {
                             if success{
                                 self.performSegue(withIdentifier: UNWIND, sender: nil)
                                 print("Selected Avatar" , self.avatarName)
+                                self.activityIndicator.isHidden = true
+                                self.activityIndicator.stopAnimating()
+                                
+                                //broadcasting that we have done registration process
+                                NotificationCenter.default.post(name: NOTIF_USER_DATA_CHANGED, object: nil)
                                 
                             }
                         })
@@ -71,6 +79,7 @@ class CreateVC: UIViewController {
         let b = CGFloat(arc4random_uniform(255)) / 255
         
         bgColor = UIColor(red: r, green: g, blue: b, alpha: 1)
+        avatarColor = "[\(r), \(g), \(b), 1]"
         UIView.animate(withDuration: 0.2){
             self.userImg.backgroundColor = self.bgColor
             
@@ -83,8 +92,17 @@ class CreateVC: UIViewController {
     }
     
     func setupView(){
+        activityIndicator.isHidden = true
         userNameTxt.attributedPlaceholder = NSAttributedString(string: "username", attributes: [NSAttributedStringKey.foregroundColor: smackPurpleColor])
         passTxt.attributedPlaceholder = NSAttributedString(string: "password", attributes: [NSAttributedStringKey.foregroundColor: smackPurpleColor])
         emailTxt.attributedPlaceholder = NSAttributedString(string: "email", attributes: [NSAttributedStringKey.foregroundColor: smackPurpleColor])
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(CreateVC.handleTap))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func handleTap(){
+        //it will let all the views know that user doesn't need to edit anything so close the keyboard or so
+        view.endEditing(true)
     }
 }
