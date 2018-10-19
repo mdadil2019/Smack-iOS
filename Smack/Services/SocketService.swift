@@ -9,6 +9,7 @@
 import UIKit
 import SocketIO
 
+let manager = SocketManager(socketURL: URL(string: BASE_URL)!)
 class SocketService: NSObject {
 
     static let instance = SocketService()
@@ -16,6 +17,33 @@ class SocketService: NSObject {
     override init() {
         super.init()
     }
+    
+    var socket: SocketIOClient = manager.defaultSocket
+    
+    func estanlishConnection(){
+        socket.connect()
+    }
+    
+    func closeConnection(){
+        socket.disconnect()
+    }
+    
+    func addChannel(channelName : String , channelDescription : String, completion : @escaping CompletionHandler){
+        socket.emit("newChannel", channelName, channelDescription)
+        completion(true)
+        
+    }
+    
+    func getChannel(completion : @escaping CompletionHandler){
+        socket.on("channelCreated") { (dataArray, ack) in
+            guard let channelName = dataArray[0] as? String else {return}
+            guard let channelDescription = dataArray[1] as? String else {return}
+            guard let channelId = dataArray[2] as? String else {return}
+            
+            let newChannel = Channel(channelTitle: channelName, channelDescription: channelDescription, id: channelId)
+            MessageService.instance.channels.append(newChannel)
+            completion(true)
+        }
+    }
 
-    var socket : SocketIOClient = SocketIOClient(
 }

@@ -31,6 +31,8 @@ let smackPurpleColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blu
 
 //Notifier
 let NOTIF_USER_DATA_CHANGED = Notification.Name("nofiUserRegistrationDone")
+let NOTIF_CHANNELS_LODED = Notification.Name("channelsLoded")
+let NOTIF_CHANNEL_SELECTED = Notification.Name("channelSelected")
 
 //User Defaults
 let TOKEN_KEY = "token"
