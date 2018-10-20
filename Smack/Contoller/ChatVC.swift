@@ -8,12 +8,18 @@
 
 import UIKit
 
-class ChatVC: UIViewController {
+class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var messageTxtBox: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.bindToKeyboard()
+        tableView.delegate = self
+        tableView.dataSource = self
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ChatVC.handleTap))
+        view.addGestureRecognizer(tap)
         //we are adding target to the menu btn by specifying the
         //what action to perform (selector) when user interact(for) with menuBtn
         menuBtn.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
@@ -30,19 +36,69 @@ class ChatVC: UIViewController {
         
         
     }
+    
+    @objc func handleTap(){
+        view.endEditing(true)
+    }
     @objc func channelSelected(_ notif: Notification){
         updateWithChannel()
     }
     
     func updateWithChannel(){
-        
+        getMessages()
     }
     @objc func userDataDidChange(_ notif: Notification){
         if AuthService.instance.isLoggedIn{
             MessageService.instance.findAllChannel { (sucess) in
-                print("FindAllChannels is called")
+                if MessageService.instance.channels.count > 0{
+                    MessageService.instance.selectedChannel = MessageService.instance.channels[0]
+                    self.getMessages()
+                    print("Messages are: ",self.getMessages())
+                }
             }
         }
+    }
+    
+    func getMessages(){
+        guard let channelId = MessageService.instance.selectedChannel?.id else {return}
+        print("Channel id is : ",channelId)
+        MessageService.instance.findAllMessagesForChannel(channelId: channelId) { (success) in
+            if success{
+                self.tableView.reloadData()
+            }
+        }
+        
+    }
+    
+    @IBAction func sendBtnPressed(_ sender: Any) {
+        if AuthService.instance.isLoggedIn{
+            guard let channelId = MessageService.instance.selectedChannel?.id else {return}
+            guard let message = messageTxtBox.text else {return}
+            SocketService.instance.addMessage(messageBody: message, userId: UserDataService.instance.id, channelId: channelId) { (success) in
+                self.messageTxtBox.text = ""
+                self.messageTxtBox.resignFirstResponder()
+                
+                
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as? MessageCell{
+            let message = MessageService.instance.messages[indexPath.row]
+            cell.configureCell(message: message)
+            return cell
+        }else{
+            return UITableViewCell()
+        }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return MessageService.instance.messages.count
     }
     
 }
