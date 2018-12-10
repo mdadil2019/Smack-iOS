@@ -46,6 +46,10 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatVC.reloadTableView(_:)), name: NSNotification.Name("messageArrived"), object: nil)
+    }
+    
     @objc func handleTap(){
         view.endEditing(true)
     }
@@ -91,6 +95,10 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 
             }
         }
+    }
+    
+    @objc func reloadTableView(_ notif: Notification){
+        self.tableView.reloadData();
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

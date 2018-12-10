@@ -27,6 +27,8 @@ class MessageCell: UITableViewCell {
         messageBodyLabel.text = message.message
         userNameLabel.text = message.userName
         userImage.image = UIImage(named: message.avatarName)
+        if message.avatarColor != nil && message.avatarColor != "" {
         userImage.backgroundColor = UserDataService.instance.returnUIColor(components: message.avatarColor)
+        }
     }
 }

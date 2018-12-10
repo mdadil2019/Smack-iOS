@@ -60,7 +60,7 @@ class SocketService: NSObject {
             guard let channelId = dataArray[2] as? String else {return}
             guard let userName = dataArray[3] as? String else {return}
             guard let userAvatar = dataArray[4] as? String else {return}
-            guard let userAvatarColor = dataArray[5] as? String else {return}
+             let userAvatarColor = dataArray[5] as? String 
             guard let userId = dataArray[6] as? String else {return}
             guard let timeStamp = dataArray[7] as? String else {return}
             
@@ -69,6 +69,8 @@ class SocketService: NSObject {
                 let newMessage = Message(message: msgBody, userId: userId, channelId: channelId, userName: userName, avatarName: userAvatar, avatarColor: userAvatarColor, timeStamp: timeStamp)
                 
                 MessageService.instance.messages.append(newMessage)
+                NotificationCenter.default.post(name: Notification.Name("messageArrived"), object: nil)
+                
                 completion(true)
             } else{
                 completion(true)
