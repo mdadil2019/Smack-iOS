@@ -47,9 +47,12 @@ class SocketService: NSObject {
     }
     
     func addMessage(messageBody: String, userId: String, channelId: String, completion : @escaping CompletionHandler){
-        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        let timeStamp = formatter.string(from: date)
         let user = UserDataService.instance
-        socket.emit("newMessage", messageBody, userId, channelId, user.name, user.avatarName, user.avatarColor)
+        socket.emit("newMessage", messageBody, userId, channelId, user.name, user.avatarName, user.avatarColor,timeStamp)
         
         completion(true)
     }
